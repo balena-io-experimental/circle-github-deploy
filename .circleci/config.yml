@@ -19,6 +19,7 @@ defaults: &defaults
         echo "ARCHIVE_NAME=$ARCHIVE_NAME"
         echo "export ARCHIVE_NAME=$ARCHIVE_NAME" >> $BASH_ENV
 
+    - run: |
         ARCHIVE_PATH="/tmp/dist/$ARCHIVE_NAME"
         echo "ARCHIVE_PATH=$ARCHIVE_PATH"
         echo "export ARCHIVE_PATH=$ARCHIVE_PATH" >> $BASH_ENV

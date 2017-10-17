@@ -63,7 +63,10 @@ jobs:
       - image: circleci/python:3.6-jessie
 
     steps:
-      - run: scripts/deploy.sh
+      - checkout
+
+      - deploy:
+        command: ./scripts/deploy.sh
     
 workflows:
   version: 2

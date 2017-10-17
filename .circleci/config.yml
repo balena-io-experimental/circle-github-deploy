@@ -66,8 +66,8 @@ jobs:
       - checkout
 
       - deploy:
-        command: ./scripts/deploy.sh
-    
+          command: ./scripts/deploy.sh
+
 workflows:
   version: 2
   build:
@@ -102,6 +102,15 @@ workflows:
               only: /.*/
             tags:
               only: /.*/
-  deploy:
-    jobs:
-      - deploy
+      - deploy:
+          requires:
+            - aarch64
+            - rpi
+            - armv7hf
+            - i386
+            - amd64
+          filters:
+            branches:
+              only: /.*/
+            tags:
+              only: /.*/

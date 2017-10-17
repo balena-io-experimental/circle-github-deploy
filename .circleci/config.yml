@@ -1,6 +1,6 @@
 defaults: &defaults
   docker:
-    - image: circleci/python:3.6-jessie
+    - image: circleci/python:3.6
 
       environment:
         BINARY: circle-github-deploy
@@ -60,7 +60,7 @@ jobs:
 
   deploy:
     docker:
-      - image: circleci/python:3.6-jessie
+      - image: circleci/python:3.6
 
     steps:
       - checkout

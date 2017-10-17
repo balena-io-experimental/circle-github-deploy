@@ -3,8 +3,6 @@ defaults: &defaults
     - image: circleci/python:3.6-jessie
 
       environment:
-        GITHUB_USER: resin-io-playground
-        GITHUB_REPO: circle-github-deploy
         BINARY: circle-github-deploy
 
   steps:
@@ -60,6 +58,13 @@ jobs:
     environment:
       TARGET: x86_64-unknown-linux-gnu
 
+  deploy:
+    docker:
+      - image: circleci/python:3.6-jessie
+
+    steps:
+      - run: scripts/deploy.sh
+    
 workflows:
   version: 2
   build:
@@ -94,3 +99,6 @@ workflows:
               only: /.*/
             tags:
               only: /.*/
+  deploy:
+    jobs:
+      - deploy

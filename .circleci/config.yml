@@ -1,5 +1,3 @@
-version: 2
-
 defaults: &defaults
   docker:
     - image: debian:jessie
@@ -33,6 +31,8 @@ defaults: &defaults
     - store_artifacts:
         path: /tmp/dist
         destination: /
+
+version: 2
 
 jobs:
   aarch64:

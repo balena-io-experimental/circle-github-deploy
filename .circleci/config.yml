@@ -9,18 +9,19 @@ defaults: &defaults
     - checkout
 
     - run: |
-        GIT_TAG=$(git tag -l --points-at HEAD)
-        echo "export GIT_TAG=$GIT_TAG" >> $BASH_ENV
-
-    - run: |
-        VERSION=$GIT_TAG
-        if [ -z "$GIT_TAG" ]; then VERSION="$CIRCLE_BRANCH-$(echo $CIRCLE_SHA1 | cut -c -7)"; fi
+        VERSION=$CIRCLE_TAG
+        if [ -z "$CIRCLE_TAG" ]; then VERSION="$CIRCLE_BRANCH-$(echo $CIRCLE_SHA1 | cut -c -7)"; fi
+        echo "VERSION=$VERSION"
         echo "export VERSION=$VERSION" >> $BASH_ENV
 
     - run: |
         ARCHIVE_NAME="$BINARY-$VERSION-$CIRCLE_JOB.tar.gz"
+        echo "ARCHIVE_NAME=$ARCHIVE_NAME"
         echo "export ARCHIVE_NAME=$ARCHIVE_NAME" >> $BASH_ENV
-        echo "export ARCHIVE_PATH=/tmp/dist/$ARCHIVE_NAME" >> $BASH_ENV
+
+        ARCHIVE_PATH="/tmp/dist/$ARCHIVE_NAME"
+        echo "ARCHIVE_PATH=$ARCHIVE_PATH"
+        echo "export ARCHIVE_PATH=$ARCHIVE_PATH" >> $BASH_ENV
 
     - run: mkdir -p /tmp/build /tmp/dist
     - run: dd if=/dev/urandom of=/tmp/build/$TARGET.bin count=1

@@ -14,7 +14,8 @@ main() {
     need_cmd jq
 
     if [ -z "$CIRCLE_TAG" ]; then
-        quit "Deploying only when CIRCLE_TAG is defined"
+        say "Deploying only when CIRCLE_TAG is defined"
+        exit 0
     fi
 
     # Get the list with CircleCI build numbers for the current tagged release
@@ -40,11 +41,6 @@ say() {
 
 err() {
     printf '\33[1;31m%s:\33[0m %s\n' "$APPNAME" "$1" >&2
-    kill -s TERM $TOP_PID
-}
-
-quit() {
-    say "$1"
     kill -s TERM $TOP_PID
 }
 

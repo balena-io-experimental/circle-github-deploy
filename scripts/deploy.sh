@@ -13,6 +13,7 @@ main() {
     need_cmd curl
     need_cmd jq
     need_cmd mkdir
+    need_cmd wc
 
     if [ -z "$CIRCLE_TAG" ]; then
         say "Deploying only when CIRCLE_TAG is defined"
@@ -24,6 +25,11 @@ main() {
     local _filter='.[] | select(.vcs_tag == "'$CIRCLE_TAG'" and .workflows.job_name != "deploy") | .build_num'
     local _build_nums=$(ensure jq "$_filter" <<< $_builds)
 
+    local _build_count=$(wc -l <<< $_build_nums)
+    if [ "$_build_count" == "1" ]; then
+        err "No builds for tagged release $CIRCLE_TAG"
+    fi
+
     ensure mkdir -p /tmp/artifacts
 
     IFS=$'\n'
@@ -31,16 +37,17 @@ main() {
         say "Downloading artifacts for #${build_num}..."
 
         local _artifacts_json=$(ensure circle "$CIRCLE_FULL_ENDPOINT/$build_num/artifacts")
-        local _artifacts=$(ensure jq '.[] | .url' <<< $_artifacts_json)
+        local _artifacts=$(ensure jq -r '.[] | .url' <<< $_artifacts_json)
         for artifact in $_artifacts; do
             say $artifact
+            (cd /tmp/artifacts; ensure curl -sSOL --retry 3 $artifact)
         done
     done
 }
 
 circle() {
     ensure curl "${1}?circle-token=$CIRCLE_TOKEN" \
-        -s --retry 3 \
+        -sS --retry 3 \
         -H "Accept: application/json"
 }
 

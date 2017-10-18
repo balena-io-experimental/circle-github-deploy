@@ -62,8 +62,12 @@ main() {
     local _upload_url
 
     # Grab latest release notes from the Changelog
-
-    _body=$(ensure cat CHANGELOG.md | grep -Pzo '##.*\n\n\K\X*?(?=\n##|$)' | head -n1 -z | tr '\0' '\n')
+    _body=$(
+        ensure cat CHANGELOG.md \
+        | ensure grep -Pzo '##.*\n\n\K\X*?(?=\n##|$)' \
+        | ensure tr '\0' '\n' \
+        | ensure head -n1
+    )
 
     _payload=$(
         jq --null-input \
@@ -81,7 +85,11 @@ main() {
             -d "$_payload"
     )
 
-    _upload_url=$(echo "$_response" | jq -r .upload_url | sed -e "s/{?name,label}//")
+    _upload_url=$(
+        echo "$_response" \
+        | ensure jq -r .upload_url \
+        | ensure sed -e "s/{?name,label}//"
+    )
 
     for _file in /tmp/artifacts/*; do
         local _basename

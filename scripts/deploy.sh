@@ -19,11 +19,13 @@ main() {
         say "Deploying only when CIRCLE_TAG is defined"
         exit 0
     fi
-
+    
+    sleep 5s
+    
     # Get the list with CircleCI build numbers for the current tagged release
     local _builds=$(ensure circle "$CIRCLE_FULL_ENDPOINT")
     local _filter='.[] | select(.vcs_tag == "'$CIRCLE_TAG'" and .workflows.job_name != "deploy") | .build_num'
-    local _build_nums=$(ensure jq "$_filter" <<< $_builds)
+    local _build_nums=$(ensure jq -r "$_filter" <<< $_builds)
 
     local _build_count=$(wc -l <<< $_build_nums)
     if [ "$_build_count" == "1" ]; then

@@ -27,6 +27,11 @@ main() {
     local _filter='.[] | select(.vcs_tag == "'$CIRCLE_TAG'" and .workflows.job_name != "deploy") | .build_num'
     local _build_nums=$(ensure jq -r "$_filter" <<< $_builds)
 
+    IFS=$'\n'
+    for build_num in $_build_nums; do
+        say "#${build_num}"
+    fi
+
     local _build_count=$(wc -l <<< $_build_nums)
     if [ "$_build_count" == "1" ]; then
         err "No builds for tagged release $CIRCLE_TAG"

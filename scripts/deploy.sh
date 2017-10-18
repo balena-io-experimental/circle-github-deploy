@@ -20,7 +20,7 @@ main() {
         exit 0
     fi
     
-    sleep 5s
+    sleep 30s
     
     # Get the list with CircleCI build numbers for the current tagged release
     local _builds=$(ensure circle "$CIRCLE_FULL_ENDPOINT")

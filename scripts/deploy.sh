@@ -30,7 +30,7 @@ main() {
     IFS=$'\n'
     for build_num in $_build_nums; do
         say "#${build_num}"
-    fi
+    done
 
     local _build_count=$(wc -l <<< $_build_nums)
     if [ "$_build_count" == "1" ]; then

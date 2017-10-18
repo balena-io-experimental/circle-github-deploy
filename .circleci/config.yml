@@ -64,6 +64,10 @@ jobs:
     docker:
       - image: circleci/python:3.6
 
+    environment:
+      GITHUB_USER: resin-io-playground
+      GITHUB_REPO: circle-github-deploy
+
     steps:
       - checkout
 
